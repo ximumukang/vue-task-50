@@ -1,5 +1,4 @@
 <template>
-  <Home>
     <div class="editQuestionnaire">
       <div id="wenjuan">
         <h1 class="creatTitle">
@@ -24,10 +23,9 @@
       </div>
       <Modal></Modal>
     </div>
-  </Home>
 </template>
 <script type="text/ecmascript-6">
-  import Home from '../components/Home.vue'
+
   import Modal from '../components/Modal.vue'
   import { mapState,mapMutations,mapGetters } from 'vuex'
   export default {
@@ -54,7 +52,6 @@
     },
     components : {
       Modal,
-      Home
     },
     beforeRouteLeave(to,from,next){
         this.clearToFillQuestionnaire();

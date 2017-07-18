@@ -24,11 +24,19 @@ export default new Vuex.Store({
   },
 
   mutations: {
+
+    //Home 相关
+
     /* 点击新建 列表隐藏 */
     build: function (state) {
       state.isShowTable = false;
       router.push({path:"editQuestionnaire"});
     },
+
+
+
+    //edit 相关
+
     addQuestion: function (state) {
       state.isAddQuestion= !state.isAddQuestion;
     },
@@ -100,12 +108,12 @@ export default new Vuex.Store({
     },
     /*保存问卷*/
     saveQuestion : function (state) {
-      state.message = "问卷已保存."
+      state.message = "问卷已保存.";
       state.isOpenModal = true;
       state.currentSavedQuestion={
-        questionList : state.questionList ,
-        titleAndDate : state.titleAndDate
-      }
+        questionList: state.questionList ,
+        titleAndDate: state.titleAndDate
+      };
       if(state.savedIndex >= 0){
         let savedQuestionnaire=JSON.parse(localStorage.savedQuestionnaire)
         savedQuestionnaire.splice(state.savedIndex,1,state.currentSavedQuestion);
@@ -113,6 +121,7 @@ export default new Vuex.Store({
         state.currentSavedQuestion=null;
       }
     },
+
     /*child's confirm emit closeModal*/
     closeModal : function (state) {
       state.isOpenModal = false ;
@@ -147,7 +156,7 @@ export default new Vuex.Store({
         state.currentSavedQuestion={
           questionList : state.questionList ,
           titleAndDate : state.titleAndDate
-        }
+        };
         submitQuestionnaire.push(state.currentSavedQuestion);
         localStorage.submitQuestionnaire=JSON.stringify(submitQuestionnaire);
         state.currentSavedQuestion=null;
@@ -160,34 +169,34 @@ export default new Vuex.Store({
       }
       //确定提交填完的问卷
       if(state.isFromFill){
-        var dataAll = localStorage.dataAll ? JSON.parse(localStorage.dataAll) : [] ;
-        var data = dataAll[state.submitIndex] ;
-        if(data==undefined){
-          data=[];
+        let dataAll = localStorage.dataAll ? JSON.parse(localStorage.dataAll) : [] ;
+        let aData = dataAll[state.submitIndex] ;
+        if(aData==undefined){
+          aData=[];
           for(let i=0;i<state.questionList.length;i++){
-            var aOption=[]
+            let aQuestion=[];
             if(state.questionList[i].isTextType){
-              aOption.push(state.questionList[i].answer);
+              aQuestion.push(state.questionList[i].answer);
             }else{
               for(let f=0 ; f<state.questionList[i].options.length ; f++){
-                aOption.push(state.questionList[i].options[f].answer)
+                aQuestion.push(state.questionList[i].options[f].answer)
               }
             }
-            data.push(aOption)
+            aData.push(aQuestion)
           }
         }
         else {
           for(let i=0;i<state.questionList.length; i++){
             if(state.questionList[i].options){
               for(let f=0;f<state.questionList[i].options.length ; f++){
-                data[i][f]=Number(data[i][f])+Number(state.questionList[i].options[f].answer);
+                aData[i][f]=aData[i][f]+state.questionList[i].options[f].answer;
               }
             }else {
-              data[i].push(state.questionList[i].answer)
+              aData[i].push(state.questionList[i].answer)
             }
           }
         }
-        dataAll[state.submitIndex]=data;
+        dataAll[state.submitIndex]=aData;
         localStorage.dataAll=JSON.stringify(dataAll);
       }
       state.isFromSubmit=false;
@@ -273,7 +282,7 @@ export default new Vuex.Store({
         return
       }
     },
-    //提交已完成的问卷
+    //点击提交填写的问卷
     submitFill(state){
       function isFinish() {
         for(let i=0;i<state.questionList.length;i++){
@@ -302,7 +311,6 @@ export default new Vuex.Store({
         state.hasCancel = false;
         state.isFromFill=false;
       }
-
     }
   },
   actions:{

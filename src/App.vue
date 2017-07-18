@@ -1,5 +1,15 @@
 <template>
-    <router-view></router-view>
+  <div>
+    <header>
+      <h1 id="first-h1">问卷系统</h1>
+      <h1 id="second-h1"><router-link to="/">我的问卷</router-link></h1>
+    </header>
+    <main>
+      <div id="container">
+        <router-view></router-view>
+      </div>
+    </main>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">

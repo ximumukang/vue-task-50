@@ -5,7 +5,7 @@
                 <h2 class="message-box__title">提示</h2>
                 <p class="message-box__message">{{message}}</p>
                 <div class="message-box__btns">
-                   <router-link to="/" v-if="isToIndex"><button @click="confirm" >确定</button></router-link>
+                    <router-link to="/" v-if="isToIndex"><button @click="confirm" >确定</button></router-link>
                     <button @click="confirm" v-else>确定</button>
                     <button @click="cancelModal" v-show="hasCancel">取消</button>
                 </div>
