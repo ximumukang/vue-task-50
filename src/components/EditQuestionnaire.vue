@@ -10,42 +10,50 @@
             <hr>
             <div id="question-list">
                 <div v-for="(item,index) in questionList" class="question">
-                    <h3 v-if="item.isEditQuestion">Q<span>{{index+1}}</span> <input type="text" v-model="item.question" @blur="item.isEditQuestion = false" v-focus></h3>
-                    <h3 v-else @click="item.isEditQuestion = true">Q<span>{{index+1}}</span> {{item.question}}</h3>
+                    <h3 v-if="item.isEditQuestion">Q<span>{{index+1}}</span>
+                      <input type="text" v-model="item.question" @blur="item.isEditQuestion = false" v-focus>
+                    </h3>
+                    <h3 v-else @click="item.isEditQuestion = true">
+                      Q<span>{{index+1}}</span> {{item.question}}
+                    </h3>
                     <textarea v-if="item.isTextType" cols="60" rows="3"></textarea>
                     <div v-else>
                         <div v-for="(option,optionIndex) in item.options">
-                            <p v-if="option.isEditOption"><input type="text" v-model="option.value" @blur="option.isEditOption = false" v-focus></p>
-                          <p v-else @click="option.isEditOption = true"><span></span>{{option.value}}<span class="remove-option" @click.stop="deleteOption({index,optionIndex})"></span></p>
+                            <p v-if="option.isEditOption">
+                              <input type="text" v-model="option.value" @blur="option.isEditOption = false" v-focus>
+                            </p>
+                          <p v-else @click="option.isEditOption = true">
+                            <span></span>{{option.value}}
+                            <span class="remove-option" @click.stop="deleteOption({index,optionIndex})"></span>
+                          </p>
                         </div>
                         <p class="add-option" @click.stop="addOption(index)"></p>
                     </div>
                     <ul>
-                        <li><button class="delete-question" @click="deleteQuestion(index)">删除</button></li>
-                        <li><button class="clone-question" @click="cloneQuestion(index)">复用</button></li>
-                        <li><button class="go-down" @click="goDown(index)">下移</button></li>
-                        <li><button class="go-up" @click="goUp(index)">上移</button></li>
+                        <li class="delete-question" @click="deleteQuestion(index)">删除</li>
+                        <li class="clone-question" @click="cloneQuestion(index)">复用</li>
+                        <li class="go-down" @click="goDown(index)">下移</li>
+                        <li class="go-up" @click="goUp(index)">上移</li>
                     </ul>
                 </div>
             </div>
         </div>
         <div id="question-type" v-show="isAddQuestion">
-
-                <button id="audio-type" @click="addAudioType">单选</button>
-                <button id="checkbox-type" @click="addCheckboxType">多选</button>
-                <button id="text-type" @click="addTextType">文本</button>
-
+            <button id="audio-type" @click="addAudioType">单选</button>
+            <button id="checkbox-type" @click="addCheckboxType">多选</button>
+            <button id="text-type" @click="addTextType">文本</button>
         </div>
-        <div id="add-question" @click="addQuestion">
-            添加问题
-        </div>
+        <div id="add-question" @click="addQuestion">添加问题</div>
         <hr>
         <div id="my-calender">
-            <span id="date">问卷截止日期</span> <input id="mydatepicker" type="date" v-model="titleAndDate.date">&nbsp;
-            <span id="button-group">
-                <button id="save-question" @click="saveQuestion">保存问卷</button>&nbsp;&nbsp;&nbsp;
-                <button id="submit-question" @click="submitQuestion">发布问卷</button>
-            </span>
+          <span id="date-group">
+            <label id="date" for="mydatepicker">问卷截止日期</label>
+            <input id="mydatepicker" type="date" v-model="titleAndDate.date">
+          </span>
+          <span id="button-group">
+            <button id="save-question" @click="saveQuestion">保存问卷</button>&nbsp;&nbsp;&nbsp;
+            <button id="submit-question" @click="submitQuestion">发布问卷</button>
+          </span>
         </div>
         <Modal></Modal>
   </div>
@@ -101,7 +109,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   hr{
     margin-bottom: 30px;
   }
@@ -122,11 +130,14 @@
     padding-bottom:1.5em ;
   }
   #question-list ul{
-    height: 40px;
+    height: 24px;
     opacity: 0;
   }
+  #question-list ul li {
+    cursor: pointer;
+  }
   #question-list .question{
-    padding: 1.5em;
+    padding: .25em;
   }
   #question-list .question:hover {
     background: rgb(254, 241, 232);
@@ -170,29 +181,24 @@
     opacity: 1;
   }
   #question-type{
-    height: 30px;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+    height: 80px;
     width: 90%;
     margin: 0 auto;
-    padding: 25px 0;
     border: 1px solid #7d7d7d;
-    text-align: center;
   }
   textarea{
     margin-left: 2em;
     width: 90%;
   }
- /* #question-type div{
-    width: 400px;
-    margin: 0 auto;
-    line-height: 80px;
-    height: 80px;
-  }*/
   #question-type button{
-    width: 100px;
-    margin-right: 25px;
-    padding: 3px 0;
-
+    width:25%;
+    margin-top: 20px;
+    height: 40px;
   }
+
   #question-type button:before,#question-list div p:before{
     content: "\E600";
     margin-right: 1em;
@@ -210,20 +216,22 @@
     margin-right: 5px;
   }
   #my-calender{
+    display: flex;
+    flex-flow: row wrap;
     width: 90%;
     line-height: 1.5em;
     margin:30px auto;
+    justify-content: space-around;
+  }
+  #date-group {
+    text-align: center;
+  }
+  #mydatepicker {
+    margin-bottom: 0.5em;
+  }
 
-  }
-  #button-group{
-    width: 300px;
-    float: right;
-  }
   #button-group button{
     padding: 4px 10px;
-  }
-  #date{
-    margin-left: 20%;
   }
   .creatTitle input{
     width: 90%;

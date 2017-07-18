@@ -1,40 +1,40 @@
-import Vue from 'vue' ;
-import Vuex from 'vuex' ;
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state:{
-    isAddQuestion : false ,
-    questionList : [] ,
-    titleAndDate :{
-      title : '这里是标题',
-      date : ''
+  state: {
+    isAddQuestion: false,
+    questionList: [],
+    titleAndDate: {
+      title: '这里是标题',
+      date: ''
     },
-    isOpenModal : false ,
-    hasCancel : false ,
-    message : '',
-    isFormSubmit :false,
-    isFromFill :false,
-    currentSavedQuestion : null,
-    savedIndex : -1,
-    submitIndex : -1,
-    viewIndex : -1,
-    isToIndex :true,
+    isOpenModal: false,
+    hasCancel: false,
+    message: '',
+    isFormSubmit: false,
+    isFromFill: false,
+    currentSavedQuestion: null,
+    savedIndex: -1,
+    submitIndex: -1,
+    viewIndex: -1,
+    isToIndex: true
   },
 
-  mutations : {
-    /*点击新建 列表隐藏*/
-    build : function (state) {
-      state.isShowTable=false;
+  mutations: {
+    /* 点击新建 列表隐藏 */
+    build: function (state) {
+      state.isShowTable = false;
       router.push({path:"editQuestionnaire"});
     },
-    addQuestion : function (state) {
+    addQuestion: function (state) {
       state.isAddQuestion= !state.isAddQuestion;
     },
-    addAudioType : function (state) {
+    addAudioType: function (state) {
       state.questionList.push({
-        question: "单选题",
+        question: '单选题',
         type:"audio",
         isTextType : false,
         isEditQuestion : false,
@@ -45,36 +45,37 @@ export default new Vuex.Store({
             {value:"选项三" , isEditOption : false , isActive : false , answer : 0}
           ]
       });
-      state.isAddQuestion= !state.isAddQuestion;
+      state.isAddQuestion = !state.isAddQuestion;
     },
-    addCheckboxType : function (state) {
+    addCheckboxType: function (state) {
       state.questionList.push({
-        question: "多选题",
-        type:"checkBox",
-        isTextType : false,
-        isEditQuestion : false,
-        options :
+        question: '多选题',
+        type: 'checkBox',
+        isTextType: false,
+        isEditQuestion: false,
+        options:
           [
-            {value:"选项一" , isEditOption : false , isActive : false , answer : 0} ,
-            {value:"选项二" , isEditOption : false , isActive : false , answer : 0} ,
-            {value:"选项三" , isEditOption : false , isActive : false , answer : 0}
+            {value: '选项一', isEditOption: false, isActive: false, answer: 0},
+            {value: '选项二', isEditOption: false, isActive: false, answer: 0},
+            {value: '选项三', isEditOption: false, isActive: false, answer: 0}
           ]
       });
-      state.isAddQuestion= !state.isAddQuestion;
+      state.isAddQuestion = !state.isAddQuestion;
     },
-    addTextType : function (state) {
+    addTextType: function (state) {
       state.questionList.push({
-        question: "文本题",
-        answer: "",
-        type:"text",
-        isTextType : true,
-        isEditQuestion : false,
+        question: '文本题',
+        answer: '',
+        type: 'text',
+        isTextType: true,
+        isEditQuestion: false,
       });
       state.isAddQuestion= !state.isAddQuestion;
     },
-    /*复用，删除，下移，上移*/
-    cloneQuestion : function(state,index){
-      state.questionList.splice(index,0,state.questionList[index]);
+    /* 复用，删除，下移，上移 */
+    cloneQuestion: function (state, index) {
+      let aClone = JSON.parse(JSON.stringify(state.questionList[index]));
+      state.questionList.splice(index, 0, aClone);
     },
     deleteQuestion : function(state,index){
       state.questionList.splice(index,1);

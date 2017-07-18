@@ -7,9 +7,9 @@
 <script type="text/ecmascript-6">
   import Home from '../components/Home.vue'
   import EditQuestionnaire from '../components/EditQuestionnaire'
-  import { mapState,mapMutations} from 'vuex'
+  import { mapState, mapMutations} from 'vuex'
   export default {
-      name : 'editQuestionnaire',
+      name: 'editQuestionnaire',
       components: {
           Home,
           EditQuestionnaire

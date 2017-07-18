@@ -1,50 +1,10 @@
 <template>
-  <div>
     <router-view></router-view>
-  </div>
 </template>
-<!--<template>
-  <div id="app">
-    <header>
-      <h1 id="first-h1">问卷系统</h1>
-      <h1 id="second-h1"><router-link to="/" id="myQuestion">我的问卷</router-link></h1>
-    </header>
-    <main>
-      <div id="container">
-        <router-view></router-view>
-      </div>
-    </main>
-  </div>
-</template>-->
 
 <script type="text/ecmascript-6">
-  import { mapState} from 'vuex'
-  import { mapMutations } from 'vuex'
   export default {
-    name: 'app',
-    date : function () {
-      return {
 
-      }
-    },
-    computed :{
-      ...mapState([
-          'isShowTable'
-      ])
-    },
-    methods :{
-      ...mapMutations([
-          'build'
-      ]),
-      go(){
-          router.push('editQuestionnaire');
-      }
-    },
-//    beforeRouterLeave (to , from , next){
-//        alert('123');
-//        this.clickBuild();
-//        next();
-//    }
   }
 </script>
 
@@ -130,7 +90,7 @@
     height: 100%;
   }
   #container{
-    width: 75%;
+    width:90%;
     min-height: 300px;
     margin: 50px auto;
     padding: 1em 1em 2.5em;
@@ -140,7 +100,11 @@
     background: #fff;
     position: relative;
   }
-
+  @media only screen and(min-width:798px){
+    #container {
+      width: 75%;
+    }
+  }
 
   hr{
     margin-bottom: 30px;

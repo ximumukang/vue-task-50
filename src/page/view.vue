@@ -1,29 +1,34 @@
 <template>
   <Home>
-      <div class="editQuestionnaire">
-        <div id="wenjuan">
-          <h1 class="creatTitle">
-            {{titleAndDate.title}}
-          </h1>
-          <hr>
-          <div id="question-list">
-            <div v-for="(item,index) in questionList" class="question">
-              <h3>Q{{index+1}} {{item.question}}</h3>
-              <p v-if="item.isTextType" v-for="value in viewData[index]">{{value}}</p>
-              <div>
-                <canvas v-show="!item.isTextType"  width='450px' height='220px'></canvas>
-                <div class="describe"><span v-for="(option,optionIndex) in item.options">{{option.value}} <span v-bind:class="fillColors[optionIndex]"></span></span></div>
+    <div class="editQuestionnaire">
+      <div id="wenjuan">
+        <h1 class="creatTitle">
+          {{titleAndDate.title}}
+        </h1>
+        <hr>
+        <div id="question-list">
+          <div v-for="(item,index) in questionList" class="question">
+            <h3>Q{{index+1}} {{item.question}}</h3>
+            <p v-if="item.isTextType" v-for="value in viewData[index]">{{value}}</p>
+            <div>
+              <canvas v-show="!item.isTextType"  width='450px' height='220px'></canvas>
+              <div class="describe">
+                  <span v-for="(option,optionIndex) in item.options">{{option.value}}
+                    <span v-bind:class="fillColors[optionIndex]"></span>
+                  </span>
               </div>
-
             </div>
-          </div>
-        </div>
+          </div><!--question-->
+        </div><!--question-list-->
         <hr>
         <div id="back-div">
-          <button><router-link to="/">返回</router-link></button>
+          <button>
+            <router-link to="/">返回</router-link>
+          </button>
         </div>
         <Modal></Modal>
       </div>
+    </div>
   </Home>
 </template>
 

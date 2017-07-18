@@ -13,16 +13,16 @@
                 <th>标题</th>
                 <th>时间</th>
                 <th>状态</th>
-                <th>操作 <button class="build-new">
-                  <router-link to="/editQuestionnaire">新建问卷</router-link>
-                  <!-- <a @click="router.push('editQuestionnaire')"></a>-->
-                </button>
+                <th>操作
+                  <button class="build-new">
+                    <router-link to="/editQuestionnaire">新建问卷</router-link>
+                  </button>
                 </th>
               </tr>
               <tr v-for="(questionnaire,index) in savedQuestionnaire" class="tr">
                 <td>{{questionnaire.titleAndDate.title}}</td>
                 <td>{{ questionnaire.titleAndDate.date | empty }}</td>
-                <td>未发布</td>
+                <td class="saving">未发布</td>
                 <td>
                   <button ><router-link to="/editQuestionnaire">
                     <span @click="editAgain(index)">编辑问卷</span></router-link>
@@ -32,8 +32,9 @@
               </tr>
               <tr v-for="(questionnaire,index) in submitQuestionnaire" class="tr">
                 <td>{{questionnaire.titleAndDate.title}}</td>
-                <td>{{ questionnaire.titleAndDate.date}}</td>
-                <td>{{new Date(questionnaire.titleAndDate.date)>new Date() ? "发布中" : "已结束"}}</td>
+                <td>{{questionnaire.titleAndDate.date}}</td>
+                <td v-if="new Date(questionnaire.titleAndDate.date)>new Date()" class="ing">发布中</td>
+                <td v-else class="been">已结束</td>
                 <td>
                   <button  v-if="new Date(questionnaire.titleAndDate.date)>new Date()">
                     <router-link to="/fill"><span @click="fill(index)">填写问卷</span></router-link>
@@ -47,73 +48,69 @@
             </table>
           </div>
           <slot></slot>
-          <router-view></router-view>
         </div>
       </main>
-        <!--<a id="build" @click="router.push('editQuestionnaire')">新建问卷</a>-->
+
     </div>
 </template>
 <script type="text/ecmascript-6">
   import { mapState,mapMutations } from 'vuex'
-export default {
-  name: 'Home',
-  props:['fatherComponent'],
-  data:function () {
-    return {
-        savedIndex : '',
-        savedQuestionnaire :'',
-        submitQuestionnaire :'',
-        isShowTable:false,
-    }
-  },
-  filters:{
-     empty:function (value) {
-       if(!value){
-           return "-"
-       }
-       return value ;
-     }
-  } ,
-  computed:{
-      ...mapState([
-        'savedIndex',
-        'submitIndex'
-      ]),
-  },
-  created:function () {
-    this.savedQuestionnaire=localStorage.savedQuestionnaire ? JSON.parse(localStorage.savedQuestionnaire) : [];
-    this.submitQuestionnaire=localStorage.submitQuestionnaire ? JSON.parse(localStorage.submitQuestionnaire) : [];
-    if(this.savedQuestionnaire.length > 0 || this.submitQuestionnaire.length >0){
-      this.isShowTable=true
-    }else{
-      this.isShowTable=false
-    }
-  },
-  methods:{
-     /* editAgain(index){
-       router.push('editQuestionnaire');
-        alert(index);
-      },*/
-    ...mapMutations([
-        'editAgain',
-        'fill',
-        'view'
-    ]),
-    deleteSaved(index){
-        this.savedQuestionnaire.splice(index,1);
-        localStorage.savedQuestionnaire=JSON.stringify(this.savedQuestionnaire);
-        if(this.savedQuestionnaire.length==0 && this.submitQuestionnaire==0){
-          this.isShowTable=false;
-        }
-    },
-    deleteSubmit(index){
-      this.submitQuestionnaire.splice(index,1);
-      localStorage.submitQuestionnaire=JSON.stringify(this.submitQuestionnaire);
-      if(this.savedQuestionnaire.length==0 && this.submitQuestionnaire==0){
-        this.isShowTable=false;
+  export default {
+    name: 'Home',
+    props:['fatherComponent'],
+    data: function (){
+      return {
+          savedIndex : '',
+          savedQuestionnaire :'',
+          submitQuestionnaire :'',
+          isShowTable:false,
       }
-    }
-  },
+    },
+    filters:{
+       empty:function (value) {
+         if(!value){
+             return "-"
+         }
+         return value ;
+       }
+    } ,
+    computed:{
+        ...mapState([
+          'savedIndex',
+          'submitIndex'
+        ]),
+    },
+    created:function () {
+      this.savedQuestionnaire=localStorage.savedQuestionnaire ? JSON.parse(localStorage.savedQuestionnaire) : [];
+      this.submitQuestionnaire=localStorage.submitQuestionnaire ? JSON.parse(localStorage.submitQuestionnaire) : [];
+      if(this.savedQuestionnaire.length > 0 || this.submitQuestionnaire.length >0){
+        this.isShowTable=true
+      }else{
+        this.isShowTable=false
+      }
+    },
+    updated: function () {
+      if(this.savedQuestionnaire.length > 0 || this.submitQuestionnaire.length >0){
+        this.isShowTable=true
+      }else{
+        this.isShowTable=false
+      }
+    },
+    methods:{
+      ...mapMutations([
+          'editAgain',
+          'fill',
+          'view'
+      ]),
+      deleteSaved(index){
+          this.savedQuestionnaire.splice(index,1);
+          localStorage.savedQuestionnaire=JSON.stringify(this.savedQuestionnaire);
+      },
+      deleteSubmit(index){
+        this.submitQuestionnaire.splice(index,1);
+        localStorage.submitQuestionnaire=JSON.stringify(this.submitQuestionnaire);
+      }
+    },
 
   beforeRouteLeave(to,from,next){
 
