@@ -21,9 +21,7 @@
       </div><!--question-list-->
       <hr>
       <div id="back-div">
-        <button>
-          <router-link to="/">返回</router-link>
-        </button>
+          <router-link to="/" class="btn">返回</router-link>
       </div>
       <Modal></Modal>
     </div>

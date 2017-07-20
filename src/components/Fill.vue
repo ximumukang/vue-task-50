@@ -19,7 +19,7 @@
       </div>
       <hr>
       <div id="submit-fill">
-        <button @click="submitFill">提交问卷</button>
+        <a @click="submitFill" class="btn">提交问卷</a>
       </div>
       <Modal></Modal>
     </div>

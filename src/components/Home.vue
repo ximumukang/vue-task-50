@@ -7,9 +7,7 @@
         <th>时间</th>
         <th>状态</th>
         <th>操作
-          <button class="build-new">
-            <router-link to="/edit">新建问卷</router-link>
-          </button>
+          <router-link to="/edit" class="build-new btn">新建问卷</router-link>
         </th>
       </tr>
       <tr v-for="(questionnaire,index) in savedQuestionnaire" class="tr">
@@ -17,12 +15,10 @@
         <td>{{ questionnaire.titleAndDate.date | empty }}</td>
         <td class="saving">未发布</td>
         <td>
-          <button>
-            <router-link to="/edit">
-              <span @click="editAgain(index)">编辑问卷</span>
-            </router-link>
-          </button>
-          <button @click="deleteSaved(index)">删除问卷</button>
+          <router-link to="/edit" class="btn">
+            <span @click="editAgain(index)">编辑问卷</span>
+          </router-link>
+          <a @click="deleteSaved(index)" class="btn">删除问卷</a>
         </td>
       </tr>
       <tr v-for="(questionnaire,index) in submitQuestionnaire" class="tr">
@@ -31,15 +27,17 @@
         <td v-if="new Date(questionnaire.titleAndDate.date)>new Date()" class="ing">发布中</td>
         <td v-else class="been">已结束</td>
         <td>
-          <button v-if="new Date(questionnaire.titleAndDate.date)>new Date()">
-            <router-link to="/fill"><span @click="fill(index)">填写问卷</span></router-link>
-          </button>
-          <button>
-            <router-link to="/view"><span @click="view(index)">查看数据</span></router-link>
-          </button>
-          <button @click="deleteSubmit(index)" v-if="new Date(questionnaire.titleAndDate.date)<new Date()">
+          <router-link to="/fill" v-if="new Date(questionnaire.titleAndDate.date)>new Date()" class="btn">
+            <span @click="fill(index)">填写问卷</span>
+          </router-link>
+          <router-link to="/view" class="btn">
+            <span @click="view(index)">查看数据</span>
+          </router-link>
+          <a @click="deleteSubmit(index)"
+             v-if="new Date(questionnaire.titleAndDate.date)<new Date()"
+             class="btn">
             删除问卷
-          </button>
+          </a>
         </td>
       </tr>
     </table>
@@ -79,7 +77,7 @@
       }
     },
     updated: function () {
-      if(this.savedQuestionnaire.length > 0 || this.submitQuestionnaire.length > 0) {
+      if (this.savedQuestionnaire.length > 0 || this.submitQuestionnaire.length > 0) {
         this.isShowTable = true
       } else {
         this.isShowTable = false
@@ -151,8 +149,16 @@
 
   table th {
     font-size: 20px;
+    height: 30px;
     font-weight: bold;
     padding: 1em;
+  }
+
+  th span {
+    display: inline-block;
+    width: 90px;
+    height: 34px;
+    border: 1px solid black;
   }
 
   th:hover {
@@ -163,12 +169,6 @@
     background: rgb(254, 241, 232);
   }
 
-  button {
-    width: 6em;
-    padding: 3px;
-    margin-left: 1em;
-  }
-
   td {
     font-size: 18px;
     text-align: center;
@@ -177,19 +177,18 @@
     border-bottom: 1px solid grey;
   }
 
-  a {
-    color: black;
+  th a {
+    display: inline-table;
   }
 
-  a:hover {
-    color: white;
-  }
-
-  button a {
-    display: block;
+  a span {
+    display: inline-block;
     width: 100%;
-    height: 100%;
-    padding: 3px;
+    height: 34px;
+  }
+
+  a span:hover {
+    color: white;
   }
 
   .add-btn, .view-data, .build-new {

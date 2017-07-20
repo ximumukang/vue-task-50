@@ -46,6 +46,7 @@
   }
   button{
     cursor: pointer;
+    padding: .25em 1em;
   }
   button:hover{
     background: #ee7419;
@@ -158,6 +159,21 @@
     border-radius: .2em;
     box-shadow: 0 .05em .25em rgba(0,0,0,.5);
     background-color: rgb(255, 255, 255);
+  }
+  a.btn {
+    display: inline-block;
+    color: black;
+    width: 90px;
+    height: 34px;
+    line-height: 34px;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    background: white;
+    overflow: hidden;
+  }
+  a.btn:hover {
+    color: white;
+    background: #ee7419;
   }
   /*清除浮动*/
   .clearfix:after {
