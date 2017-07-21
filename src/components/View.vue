@@ -10,7 +10,7 @@
           <h3>Q{{index + 1}} {{item.question}}</h3>
           <p v-if="item.isTextType" v-for="value in viewData[index]">{{value}}</p>
           <div>
-            <canvas v-show="!item.isTextType" width='450px' height='220px'></canvas>
+            <canvas v-show="!item.isTextType" width='220px' height='220px'></canvas>
             <div class="describe">
                   <span v-for="(option,optionIndex) in item.options">{{option.value}}
                     <span v-bind:class="fillColors[optionIndex]"></span>
@@ -79,8 +79,8 @@
             scale = percentage.toFixed(2);
           b = a + (2 * Math.PI) * percentage;
 
-          context.arc(250, 110, 100, a, b, false);
-          context.lineTo(250, 110);
+          context.arc(110, 110, 100, a, b, false);
+          context.lineTo(110, 110);
           a = b;
           context.fillStyle = this.fillColors[f];
           context.globalAlpha = 0.35;
@@ -98,11 +98,13 @@
 
 </script>
 
-<style>
+<style scoped>
   #back-div {
     text-align: center;
   }
-
+  .question div {
+    text-align: center;
+  }
   .describe {
     text-align: center;
   }

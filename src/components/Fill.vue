@@ -11,7 +11,14 @@
             <textarea v-if="item.isTextType" v-model="item.answer" cols="60" rows="3"></textarea>
             <div v-else>
               <div v-for="(option,optionIndex) in item.options">
-                <p @click="active({item,option,optionIndex})" v-bind:class="{active:option.isActive}">{{option.value}}</p>
+                <p v-if="item.isAudio" @click="active({item,option,optionIndex})" v-bind:class="{active:option.isActive}">
+                  <i :class="option.isActive ? 'icon-circle': 'icon-circle-blank'"></i>
+                  {{option.value}}
+                </p>
+                <p v-if="item.isCheckbox" @click="active({item,option,optionIndex})" v-bind:class="{active:option.isActive}">
+                  <i :class="option.isActive ? 'icon-check':'icon-check-empty'"></i>
+                  {{option.value}}
+                </p>
               </div>
             </div>
           </div>
@@ -59,55 +66,15 @@
     }
   }
 </script>
-<style>
-  hr{
-    margin-bottom: 30px;
-  }
-  #container h1{
-    text-align: center;
-    font-size: 30px;
-    margin: 20px auto;
-    height: 30px;
-  }
-  #container h1:hover{
-    background:  rgb(254, 241, 232);
-  }
-  #question-list{
-    width: 90%;
-    min-height: 1px;
-    margin: 0 auto;
-    line-height: 1.5em;
-    padding-bottom:1.5em ;
-  }
-  #question-list .question{
-    padding: 1.5em;
-  }
-  #question-list .question:hover {
-    background: rgb(254, 241, 232);
-  }
+<style scoped>
 
-  #question-list li{
-    float: right;
-    margin-right: 5px;
-  }
-  #question-list  p{
-    text-indent: 2em;
-  }
-  textarea{
-    margin-left: 2em;
-    width: 90%;
-  }
   #submit-fill {
     text-align: center;
   }
-  #question-list .question:hover>h3 {
-    font-weight: bold;
-  }
-  #question-list .question p:hover {
-    cursor: pointer;
-    background-color: #f0f0f0;
-  }
   .active{
+    color: #ee7419;
+  }
+  .active * {
     color: #ee7419;
   }
 </style>

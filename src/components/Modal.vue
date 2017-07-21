@@ -6,14 +6,14 @@
         <p class="message-box__message">{{message}}</p>
         <div class="message-box__btns">
           <router-link to="/" v-if="isToIndex">
-            <button @click="confirm">确定</button>
+            <button class="btn" @click="confirm">确定</button>
           </router-link>
-          <button @click="confirm" v-else>确定</button>
-          <button @click="cancelModal" v-show="hasCancel">取消</button>
+          <button class="btn" @click="confirm" v-else>确定</button>
+          <button class="btn" @click="cancelModal" v-show="hasCancel">取消</button>
         </div>
       </div>
     </div>
-    <div id="modal"></div>
+    <div id="modal-mask"></div>
   </div>
 </template>
 
@@ -45,7 +45,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .message-box__wrapper {
     position: fixed;
     top: 0;
@@ -64,7 +64,7 @@
     vertical-align: middle;
   }
 
-  #modal {
+  #modal-mask {
     position: fixed;
     left: 0;
     top: 0;
@@ -80,7 +80,7 @@
     display: inline-block;
     vertical-align: middle;
     background-color: #fff;
-    width: 420px;
+    width: 280px;
     border-radius: 3px;
     font-size: 16px;
     overflow: hidden;
@@ -104,5 +104,13 @@
   .message-box__btns {
     text-align: center;
     padding: 10px;
+  }
+  .btn {
+    width:60px;
+  }
+  @media only screen and (min-width:798px){
+    .message-box{
+      width: 400px;
+    }
   }
 </style>

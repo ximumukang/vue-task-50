@@ -19,21 +19,24 @@
 </script>
 
 <style>
+  @import './assets/Font-Awesome-3.2.1/css/font-awesome.min.css';
+
   *{
     margin: 0;
     padding: 0;
     font: 16px/1.5em Microsoft YaHei,Tahoma,Helvetica,Arial,\\5B8B\4F53,sans-serif;
     color: rgb(85, 85, 85);
   }
+  li{
+     list-style: none;
+   }
   p{
     font-size: 14px;
   }
   table *{
     font-size: 16px;
   }
-  table.calendar *{
-    font-size: 10px;
-  }
+
   a{
     list-style: none;
     color: white;
@@ -41,12 +44,9 @@
     cursor: pointer;
     text-align: center;
   }
-  li{
-    list-style: none;
-  }
+
   button{
     cursor: pointer;
-    padding: .25em 1em;
   }
   button:hover{
     background: #ee7419;
@@ -103,7 +103,7 @@
   #container{
     width:90%;
     min-height: 300px;
-    margin: 50px auto;
+    margin: 25px auto;
     padding: 1em 1em 2.5em;
     border-radius: .2em;
     box-shadow: 0 .05em .25em rgba(0,0,0,.5);
@@ -111,9 +111,11 @@
     background: #fff;
     position: relative;
   }
-  @media only screen and(min-width:798px){
+  /* and 与 （ 间必须要一个空格 */
+  @media only screen and (min-width:798px){
     #container {
       width: 75%;
+      margin: 50px auto;
     }
   }
 
@@ -133,47 +135,45 @@
     line-height: 1.5em;
     padding-bottom:1.5em ;
   }
-  #question-list .question-option{
+  #question-list .question{
     padding: .5em;
   }
-  #container h1:hover,#question-list .question-option:hover {
+  #question-list .question h3 {
+    font-size: 18px;
+    line-height: 2em;
+  }
+  #container h1:hover,
+  #question-list .question:hover {
     background: rgb(254, 241, 232);
   }
-  #question-list .question-option:hover>h3{
-    font-weight: bold;
+  #question-list .question:hover>h3{
+    font-weight: 600;
   }
+  /* i元素会继承text-indent 所以只需要1em */
   #question-list  p{
-    text-indent: 2em;
+    text-indent: 1em;
   }
   textarea{
     margin-left: 2em;
     width: 90%;
   }
-  #question-list div p:before{
-    content: "\E600";
-    margin-right: 1em;
-  }
 
-
-  button{
-    border-radius: .2em;
-    box-shadow: 0 .05em .25em rgba(0,0,0,.5);
-    background-color: rgb(255, 255, 255);
-  }
-  a.btn {
+  .btn {
     display: inline-block;
     color: black;
     width: 90px;
     height: 34px;
-    line-height: 34px;
     border-radius: 5px;
     border: 1px solid gainsboro;
     background: white;
     overflow: hidden;
   }
-  a.btn:hover {
+  .btn:hover {
     color: white;
     background: #ee7419;
+  }
+  a.btn {
+    line-height: 34px;
   }
   /*清除浮动*/
   .clearfix:after {

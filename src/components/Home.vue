@@ -180,7 +180,6 @@
   th a {
     display: inline-table;
   }
-
   a span {
     display: inline-block;
     width: 100%;

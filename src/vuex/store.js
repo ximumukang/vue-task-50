@@ -44,6 +44,7 @@ export default new Vuex.Store({
         type:"audio",
         isTextType : false,
         isEditQuestion : false,
+        isAudio: true,
         options :
           [
             {value:"选项一" , isEditOption : false , isActive : false , answer : 0} ,
@@ -59,6 +60,7 @@ export default new Vuex.Store({
         type: 'checkBox',
         isTextType: false,
         isEditQuestion: false,
+        isCheckbox: true,
         options:
           [
             {value: '选项一', isEditOption: false, isActive: false, answer: 0},
@@ -140,7 +142,7 @@ export default new Vuex.Store({
     closeModal(state){
       state.isOpenModal = false ;
     },
-
+    //复原Modal状态
     recover(state){
       state.isFromSubmit=false;
       state.isFromFill=false;
@@ -261,32 +263,32 @@ export default new Vuex.Store({
     },
     //填写问卷时点击改变isActive
     active(state,{item,option,optionIndex}){
-      if(item.type=="audio"){
+      if(item.type==="audio"){
         item.options.forEach(function (value) {
           value.isActive=false;
           value.answer=0
-        })
+        });
         item.options[optionIndex].isActive=true;
         item.options[optionIndex].answer=1;
-      }else if (item.type=="checkBox"){
+      }else if (item.type==="checkBox"){
         option.isActive=!option.isActive;
-        option.answer==0 ? option.answer=1 : option.answer=0
+        option.answer===0 ? option.answer=1 : option.answer=0
       }else{
-        return
+        return false
       }
     },
     //点击提交填写的问卷
     submitFill(state){
       function isFinish() {
         for(let i=0;i<state.questionList.length;i++){
-          var aOption=[]
-          if(state.questionList[i].isTextType && state.questionList[i].answer==""){
+          let aOption=[];
+          if(state.questionList[i].isTextType && state.questionList[i].answer===""){
             return false
           } else if(!state.questionList[i].isTextType){
             for(let f=0 ; f<state.questionList[i].options.length ; f++){
               aOption.push(state.questionList[i].options[f].answer);
             }
-            if(eval(aOption.join("+"))==0){
+            if(eval(aOption.join("+"))===0){
               return false
             }
           }
