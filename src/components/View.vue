@@ -2,13 +2,13 @@
   <div class="editQuestionnaire">
     <div id="wenjuan">
       <h1 class="creatTitle">
-        {{titleAndDate.title}}
+        {{survey.title}}
       </h1>
       <hr>
       <div id="question-list">
-        <div v-for="(item,index) in questionList" class="question">
+        <div v-for="(item,index) in survey.questionList" class="question">
           <h3>Q{{index + 1}} {{item.question}}</h3>
-          <p v-if="item.isTextType" v-for="value in viewData[index]">{{value}}</p>
+          <p v-if="item.isTextType" v-for="value in answer[index]">{{value}}</p>
           <div>
             <canvas v-show="!item.isTextType" width='220px' height='220px'></canvas>
             <div class="describe">
@@ -23,7 +23,6 @@
       <div id="back-div">
           <router-link to="/" class="btn">返回</router-link>
       </div>
-      <Modal></Modal>
     </div>
   </div>
 
@@ -31,7 +30,6 @@
 
 <script type="text/ecmascript-6">
   import Home from '../components/Home.vue'
-  import Modal from '../components/Modal.vue'
   import {mapState, mapMutations, mapGetters} from 'vuex'
   export default {
     name: 'view',
@@ -42,40 +40,32 @@
     },
     computed: {
       ...mapState([
-        'questionList',
-        'titleAndDate',
+        'survey',
         'isOpenModal',
         'message',
         'submitIndex',
         'viewIndex'
       ]),
-      viewData: function () {
-        return localStorage.dataAll ? JSON.parse(localStorage.dataAll)[this.viewIndex] : [];
+      answer: function () {
+        return JSON.parse(localStorage.submitQuestionnaire)[this.viewIndex].answer;
       }
     },
     methods: {
       ...mapMutations([
-        'clearViewQuestion'
+          'recoverSurvey'
       ]),
     },
-    components: {
-      Modal,
-    },
-    /*  created(){
-     this.viewedData=localStorage.dataAll ? JSON.parse(localStorage.dataAll): [];
-     },*/
-    mounted(){
+    updated(){
       let canvasEles = document.getElementsByTagName("canvas");
-
-      for (let i = 0; i < this.viewData.length; i++) {
-        if (typeof this.viewData[i][0] !== "number") {
+      for (let i = 0,len=canvasEles.length; i < len; i++) {
+        if (typeof this.answer[i][0] !== "number") {
           continue;
         }
-        let a = 0, b = 0, aQuestionData = eval(this.viewData[i].join("+"));
-        for (let f = 0; f < this.viewData[i].length; f++) {
+        let a = 0, b = 0, aQuestionData = eval(this.answer[i].join("+"));
+        for (let f = 0; f < this.answer[i].length; f++) {
           let context = canvasEles[i].getContext("2d");
           context.beginPath();
-          let percentage = (this.viewData[i][f] / aQuestionData),
+          let percentage = (this.answer[i][f] / aQuestionData),
             scale = percentage.toFixed(2);
           b = a + (2 * Math.PI) * percentage;
 
@@ -89,10 +79,11 @@
         }
       }
     },
-    beforeRouteLeave(to, from, next){
-      this.clearViewQuestion();
-      next();
+    beforeRouteLeave(to,from,next){
+        this.recoverSurvey();
+        next();
     }
+
   }
 
 

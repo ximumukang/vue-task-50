@@ -1,8 +1,8 @@
 <template>
   <div>
     <header>
-      <h1 id="first-h1">问卷系统</h1>
-      <h1 id="second-h1"><router-link to="/">我的问卷</router-link></h1>
+      <h1 id="survey-system"><span>?</span> 问卷系统</h1>
+      <h1 id="my-survey"><router-link to="/">我的问卷</router-link></h1>
     </header>
     <main>
       <div id="container">
@@ -68,33 +68,37 @@
   header h1{
     color: white;
     float: left;
-    margin-left: 12.5% ;
+    margin-left: 5% ;
     font-size: 18px;
     line-height: 50px;
     text-shadow: 0 -.05em .05em rgba(0,0,0,.5);
 
   }
-  #first-1h1{
+  #survey-system{
     padding-left: -16px;
   }
-  #first-h1:before{
-    content: "  ?  ";
-    background: white;
-    color: #ee7419;
-    border-radius:9px;
+  #survey-system span {
     width: 18px;
     height: 18px;
+    display: inline-block;
+    content: '?';
+    line-height: 18px;
+    margin-top: 16px;
+    color: #ee7419;
+    border-radius: 9px;
+    background: white;
+    text-align: center;
   }
-  #second-h1{
+  #my-survey{
     margin-left: 5%;
     padding: 0 10px;
     cursor: pointer;
 
   }
-  #second-h1:hover{
+  #my-survey:hover{
     background: #ee7419 linear-gradient(transparent,hsla(0,0%,100%,.1));
   }
-  #second-h1 a{
+  #my-survey a{
     display: inline-block;
     font-size: 18px;
     color: white;
@@ -116,6 +120,9 @@
     #container {
       width: 75%;
       margin: 50px auto;
+    }
+    header h1{
+      margin-left: 12.5%;
     }
   }
 

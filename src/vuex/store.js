@@ -6,21 +6,26 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isAddQuestion: false,
-    questionList: [],
-    titleAndDate: {
+    survey: {
+      questionList: [],
       title: '这里是标题',
-      date: ''
+      date: '',
+      answer:[]
     },
     isOpenModal: false,
     hasCancel: false,
     message: '',
-    isFormSubmit: false,
+    isFromSubmit: false,
     isFromFill: false,
-    currentSavedQuestion: null,
+    isDeleteSaved: false,
+    isDeleteSubmit: false,
     savedIndex: -1,
     submitIndex: -1,
     viewIndex: -1,
-    isToIndex: true
+    deleteIndex:-1,
+    isToIndex: true,
+    savedQuestionnaire: localStorage.savedQuestionnaire ? JSON.parse(localStorage.savedQuestionnaire) : [],
+    submitQuestionnaire:localStorage.submitQuestionnaire ? JSON.parse(localStorage.submitQuestionnaire) : []
   },
 
   mutations: {
@@ -30,16 +35,66 @@ export default new Vuex.Store({
     /* 点击新建 列表隐藏 */
     build: function (state) {
       state.isShowTable = false;
-      router.push({path:"editQuestionnaire"});
+    },
+
+    editAgain(state,index){
+      state.savedIndex=index;
+      let toEdit =JSON.parse(localStorage.savedQuestionnaire)[index];
+      state.survey=toEdit;
+    },
+
+    fill(state,index){
+      state.submitIndex=index;
+      let toFill = JSON.parse(localStorage.submitQuestionnaire)[index];
+      state.survey=toFill;
+    },
+
+    view(state,index){
+      state.viewIndex=index;
+      let toView = JSON.parse(localStorage.submitQuestionnaire)[index];
+      state.survey=toView;
+    },
+
+    deleteSaved(state,index){
+      state.isOpenModal=true;
+      state.message='确定删除此问卷？';
+      state.hasCancel=true;
+      state.deleteIndex=index;
+      state.isDeleteSaved=true;
+    },
+
+    confirmDeleteSaved(state){
+      let savedQuestionnaire=JSON.parse(localStorage.savedQuestionnaire);
+      savedQuestionnaire.splice(state.deleteIndex,1);
+      localStorage.savedQuestionnaire=JSON.stringify(savedQuestionnaire);
+    },
+
+    deleteSubmit(state,index){
+      state.isOpenModal=true;
+      state.message='确定删除此问卷？';
+      state.hasCancel=true;
+      state.deleteIndex=index;
+      state.isDeleteSubmit=true;
+    },
+
+    confirmDeleteSubmit(state){
+      let submitQuestionnaire=JSON.parse(localStorage.submitQuestionnaire);
+      submitQuestionnaire.splice(state.deleteIndex,1);
+      localStorage.savedQuestionnaire=JSON.stringify(submitQuestionnaire);
+    },
+
+    updateSurveyList(state){
+      state.savedQuestionnaire = localStorage.savedQuestionnaire ? JSON.parse(localStorage.savedQuestionnaire) : [];
+      state.submitQuestionnaire = localStorage.submitQuestionnaire ? JSON.parse(localStorage.submitQuestionnaire) : []
     },
 
     //edit 相关
-
     addQuestion: function (state) {
       state.isAddQuestion= !state.isAddQuestion;
     },
+
     addAudioType: function (state) {
-      state.questionList.push({
+      state.survey.questionList.push({
         question: '单选题',
         type:"audio",
         isTextType : false,
@@ -54,8 +109,9 @@ export default new Vuex.Store({
       });
       state.isAddQuestion = !state.isAddQuestion;
     },
+
     addCheckboxType: function (state) {
-      state.questionList.push({
+      state.survey.questionList.push({
         question: '多选题',
         type: 'checkBox',
         isTextType: false,
@@ -70,8 +126,9 @@ export default new Vuex.Store({
       });
       state.isAddQuestion = !state.isAddQuestion;
     },
+
     addTextType: function (state) {
-      state.questionList.push({
+      state.survey.questionList.push({
         question: '文本题',
         answer: '',
         type: 'text',
@@ -80,53 +137,58 @@ export default new Vuex.Store({
       });
       state.isAddQuestion= !state.isAddQuestion;
     },
+
     /* 复用，删除，下移，上移 */
     cloneQuestion: function (state, index) {
-      let aClone = JSON.parse(JSON.stringify(state.questionList[index]));
-      state.questionList.splice(index, 0, aClone);
+      let aClone = JSON.parse(JSON.stringify(state.survey.questionList[index]));
+      state.survey.questionList.splice(index, 0, aClone);
     },
+
     deleteQuestion : function(state,index){
-      state.questionList.splice(index,1);
+      state.survey.questionList.splice(index,1);
     },
+
     goDown :function (state,index) {
-      let aQuestion = state.questionList[index];
-      state.questionList.splice(index,1);
-      state.questionList.splice(index+1,0,aQuestion);
+      let aQuestion = state.survey.questionList[index];
+      state.survey.questionList.splice(index,1);
+      state.survey.questionList.splice(index+1,0,aQuestion);
     },
+
     goUp : function(state,index){
-      let aQuestion = state.questionList[index];
-      state.questionList.splice(index,1);
-      state.questionList.splice(index-1,0,aQuestion);
+      let aQuestion = state.survey.questionList[index];
+      state.survey.questionList.splice(index,1);
+      state.survey.questionList.splice(index-1,0,aQuestion);
     },
+
     /*添加选项*/
     addOption : function (state,index) {
-      state.questionList[index].options.push({value: "选项" , isEditOption : false , isActive : false , answer : 0});
+      state.survey.questionList[index].options.push({value: "选项" , isEditOption : false , isActive : false , answer : 0});
     },
+
     /*删除选项*/
     deleteOption : function (state,{index,optionIndex}) {
-      state.questionList[index].options.splice(optionIndex,1);
+      state.survey.questionList[index].options.splice(optionIndex,1);
     },
+
     /*保存问卷*/
     saveQuestion : function (state) {
       state.message = "问卷已保存.";
       state.isOpenModal = true;
-      state.currentSavedQuestion={
-        questionList: state.questionList ,
-        titleAndDate: state.titleAndDate
-      };
+      let savedQuestionnaire=localStorage.savedQuestionnaire?JSON.parse(localStorage.savedQuestionnaire):[];
       if(state.savedIndex >= 0){
-        let savedQuestionnaire=JSON.parse(localStorage.savedQuestionnaire)
-        savedQuestionnaire.splice(state.savedIndex,1,state.currentSavedQuestion);
-        localStorage.savedQuestionnaire=JSON.stringify(savedQuestionnaire);
-        state.currentSavedQuestion=null;
+        savedQuestionnaire.splice(state.savedIndex,1,state.survey);
+      }else {
+        savedQuestionnaire.push(state.survey);
       }
+      localStorage.savedQuestionnaire=JSON.stringify(savedQuestionnaire);
     },
-    /*点击发布问卷*/
+
+    /*点击发布问卷弹出模态框*/
     submitQuestion : function (state) {
-      if(!state.titleAndDate.date){
+      if(!state.survey.date){
           state.message = "请设置日期。" ;
           state.hasCancel = false ;
-      } else if (state.questionList.length == 0){
+      } else if (state.survey.questionList.length === 0){
           state.message = "请合理设置问卷内容。" ;
           state.hasCancel = false ;
       } else {
@@ -138,33 +200,12 @@ export default new Vuex.Store({
       state.isOpenModal = true ;
 
     },
-    /*modal.vue --start--*/
-    closeModal(state){
-      state.isOpenModal = false ;
-    },
-    //复原Modal状态
-    recover(state){
-      state.isFromSubmit=false;
-      state.isFromFill=false;
-      state.hasCancel=false;
-      state.isOpenModal = false;
-      state.isToIndex=false;
-    },
-    cancelModal(state){
-      state.isOpenModal = false ;
-      state.hasCancel = false ;
-      state.isToIndex=false;
-    },
+
     //确定发布问卷
     confirmSubmit(state){
       let submitQuestionnaire = localStorage.submitQuestionnaire ? JSON.parse(localStorage.submitQuestionnaire) : [];
-      state.currentSavedQuestion={
-        questionList : state.questionList ,
-        titleAndDate : state.titleAndDate
-      };
-      submitQuestionnaire.push(state.currentSavedQuestion);
+      submitQuestionnaire.push(state.survey);
       localStorage.submitQuestionnaire=JSON.stringify(submitQuestionnaire);
-      state.currentSavedQuestion=null;
       if(state.savedIndex >= 0){
         let savedQuestionnaire=JSON.parse(localStorage.savedQuestionnaire);
         savedQuestionnaire.splice(state.savedIndex,1);
@@ -172,95 +213,17 @@ export default new Vuex.Store({
       }
     },
 
-    //确定提交填完的问卷
-    confirmFill(state){
-      let dataAll = localStorage.dataAll ? JSON.parse(localStorage.dataAll) : [] ;
-      let aData = dataAll[state.submitIndex] ;
-      if(aData==undefined){
-        aData=[];
-        for(let i=0;i<state.questionList.length;i++){
-          let aQuestion=[];
-          if(state.questionList[i].isTextType){
-            aQuestion.push(state.questionList[i].answer);
-          }else{
-            for(let f=0 ; f<state.questionList[i].options.length ; f++){
-              aQuestion.push(state.questionList[i].options[f].answer)
-            }
-          }
-          aData.push(aQuestion)
-        }
-      }
-      else {
-        for(let i=0;i<state.questionList.length; i++){
-          if(state.questionList[i].options){
-            for(let f=0;f<state.questionList[i].options.length ; f++){
-              aData[i][f]=aData[i][f]+state.questionList[i].options[f].answer;
-            }
-          }else {
-            aData[i].push(state.questionList[i].answer)
-          }
-        }
-      }
-      dataAll[state.submitIndex]=aData;
-      localStorage.dataAll=JSON.stringify(dataAll);
+    /*modal.vue --start--*/
+    closeModal(state){
+      state.isFromSubmit=false;
+      state.isFromFill=false;
+      state.hasCancel=false;
+      state.isOpenModal = false;
+      state.isDeleteSubmit = false;
+      state.isDeleteSaved = false;
+      state.isToIndex=false;
     },
 
-    //退出编辑页时清除数据
-    clearCurrentSavedQuestion(state){
-        state.currentSavedQuestion=null;
-        state.savedIndex=-1;
-        state.questionList=[] ;
-        state.titleAndDate ={
-          title : '这里是标题',
-          date : ''
-        }
-    },
-    //退出完成问卷页时清除数据
-    clearToFillQuestionnaire(state){
-      state.submitIndex=-1;
-      state.questionList=[] ;
-      state.titleAndDate ={
-          title : '这里是标题',
-          date : ''
-      }
-    },
-    //退出查看数据页时清除数据
-    clearViewQuestion(state){
-      state.viewIndex=-1;
-      state.questionList=[] ;
-      state.titleAndDate ={
-        title : '这里是标题',
-        date : ''
-      }
-    },
-    editAgain(state,index){
-      state.savedIndex=index;
-    },
-    fill(state,index){
-      state.submitIndex=index;
-    },
-    //点击查看数据
-    view(state,index){
-      state.viewIndex=index;
-    },
-    //再次编辑改变state的questionList
-    editAgainChange(state){
-      let toEditQuestionnaire =JSON.parse(localStorage.savedQuestionnaire)[state.savedIndex];
-      state.questionList=toEditQuestionnaire.questionList;
-      state.titleAndDate=toEditQuestionnaire.titleAndDate;
-    },
-    //去完成问卷改变state的questionList
-    toFill(state){
-      let toFillQuestionnaire = JSON.parse(localStorage.submitQuestionnaire)[state.submitIndex];
-      state.questionList=toFillQuestionnaire.questionList;
-      state.titleAndDate=toFillQuestionnaire.titleAndDate;
-    },
-    //去查看数据
-    toView(state){
-      let toViewQuestionnaire = JSON.parse(localStorage.submitQuestionnaire)[state.viewIndex];
-      state.questionList=toViewQuestionnaire.questionList;
-      state.titleAndDate=toViewQuestionnaire.titleAndDate;
-    },
     //填写问卷时点击改变isActive
     active(state,{item,option,optionIndex}){
       if(item.type==="audio"){
@@ -277,16 +240,17 @@ export default new Vuex.Store({
         return false
       }
     },
-    //点击提交填写的问卷
+
+    //点击提交填写的问卷弹出模态框
     submitFill(state){
       function isFinish() {
-        for(let i=0;i<state.questionList.length;i++){
+        for(let i=0;i<state.survey.questionList.length;i++){
           let aOption=[];
-          if(state.questionList[i].isTextType && state.questionList[i].answer===""){
+          if(state.survey.questionList[i].isTextType && state.survey.questionList[i].answer===""){
             return false
-          } else if(!state.questionList[i].isTextType){
-            for(let f=0 ; f<state.questionList[i].options.length ; f++){
-              aOption.push(state.questionList[i].options[f].answer);
+          } else if(!state.survey.questionList[i].isTextType){
+            for(let f=0 ; f<state.survey.questionList[i].options.length ; f++){
+              aOption.push(state.survey.questionList[i].options[f].answer);
             }
             if(eval(aOption.join("+"))===0){
               return false
@@ -306,6 +270,54 @@ export default new Vuex.Store({
         state.hasCancel = false;
         state.isFromFill=false;
       }
+    },
+
+    //确定提交填完的问卷
+    confirmFill(state){
+      let submitQuestionnaire = JSON.parse(localStorage.submitQuestionnaire);
+      let answer = submitQuestionnaire[state.submitIndex].answer ;
+      if(!answer.length){
+
+        for(let i=0,len=state.survey.questionList.length;i<len;i++){
+          let aQuestion=[];
+          if(state.survey.questionList[i].isTextType){
+            aQuestion.push(state.survey.questionList[i].answer);
+          }else{
+            for(let f=0 ; f<state.survey.questionList[i].options.length ; f++){
+              aQuestion.push(state.survey.questionList[i].options[f].answer)
+            }
+          }
+          answer.push(aQuestion)
+        }
+      }
+      else {
+        for(let i=0;i<state.survey.questionList.length; i++){
+          if(state.survey.questionList[i].options){
+            for(let f=0;f<state.survey.questionList[i].options.length ; f++){
+              answer[i][f]=answer[i][f]+state.survey.questionList[i].options[f].answer;
+            }
+          }else {
+            answer[i].push(state.survey.questionList[i].answer)
+          }
+        }
+      }
+      localStorage.submitQuestionnaire=JSON.stringify(submitQuestionnaire);
+
+    },
+
+    //离开编辑页时还原savedindex为-1
+    recoverSavedIndex(state){
+      state.savedIndex = -1;
+      state.submitIndex = -1;
+    },
+
+    //还原survey
+    recoverSurvey(state){
+      state.survey={
+        questionList: [],
+        title: '这里是标题',
+        date: ''
+      };
     }
   },
   actions:{
@@ -318,8 +330,17 @@ export default new Vuex.Store({
       if(state.isFromFill){
         commit('confirmFill')
       }
-      commit('recover')
+      if(state.isDeleteSaved){
+        commit('confirmDeleteSaved');
+        commit('updateSurveyList')
+      }
+      if(state.isDeleteSubmit){
+        commit('confirmDeleteSubmit');
+        commit('updateSurveyList')
+      }
+      commit('closeModal')
     }
+
 
   },
 
@@ -327,3 +348,5 @@ export default new Vuex.Store({
     /*savedQuestion : state => ({title : state.titleAndDate.title,questionList : state.questionList,date : state.titleAndDate.date})*/
   }
 })
+
+

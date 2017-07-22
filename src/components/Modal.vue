@@ -9,7 +9,7 @@
             <button class="btn" @click="confirm">确定</button>
           </router-link>
           <button class="btn" @click="confirm" v-else>确定</button>
-          <button class="btn" @click="cancelModal" v-show="hasCancel">取消</button>
+          <button class="btn" @click="closeModal" v-show="hasCancel">取消</button>
         </div>
       </div>
     </div>
@@ -35,7 +35,6 @@
     },
     methods: {
       ...mapMutations([
-        'cancelModal',
         'closeModal'
       ]),
       ...mapActions([

@@ -2,15 +2,15 @@
   <div class="editQuestionnaire">
     <div id="wenjuan">
       <h1 class="creatTitle" v-if="isEditTitle">
-        <input type="text" v-model="titleAndDate.title" @blur="isEditTitle = false" v-focus>
+        <input type="text" v-model="survey.title" @blur="isEditTitle = false" v-focus>
       </h1>
       <h1 class="creatTitle" v-else @click="isEditTitle = true">
-        {{titleAndDate.title}}
+        {{survey.title}}
       </h1>
       <hr>
       <div id="question-list">
-        <div v-for="(item,index) in questionList" class="question">
-          <h3 >Q{{index + 1}}
+        <div v-for="(item,index) in survey.questionList" class="question">
+          <h3>Q{{index + 1}}
             <input v-if="item.isEditQuestion" type="text" v-model="item.question"
                    @blur="item.isEditQuestion = false" v-focus>
             <span v-else @click="item.isEditQuestion = true">{{item.question}}</span>
@@ -22,7 +22,7 @@
                 <i :class="{'icon-circle-blank': item.isAudio,'icon-check-empty': item.isCheckbox}"></i>
                 <input v-if="option.isEditOption"
                        type="text" v-model="option.value"
-                       @blur="option.isEditOption = false" v-focus />
+                       @blur="option.isEditOption = false" v-focus/>
                 <span v-else @click="option.isEditOption = true">{{option.value}}</span>
                 <i class="remove-option icon-trash" @click.stop="deleteOption({index,optionIndex})"></i>
               </p>
@@ -54,14 +54,14 @@
     </div>
     <hr>
     <div id="my-calender">
-          <span id="date-group">
-            <label id="date" for="mydatepicker">问卷截止日期</label>
-            <input id="mydatepicker" type="date" v-model="titleAndDate.date">
-          </span>
+      <span id="date-group">
+        <label id="date" for="mydatepicker">问卷截止日期</label>
+        <input id="mydatepicker" type="date" v-model="survey.date">
+      </span>
       <span id="button-group">
-            <button class="btn" id="save-question" @click="saveQuestion">保存问卷</button>&nbsp;&nbsp;&nbsp;
-            <button class="btn" id="submit-question" @click="submitQuestion">发布问卷</button>
-          </span>
+        <button class="btn" id="save-question" @click="saveQuestion">保存问卷</button>&nbsp;&nbsp;&nbsp;
+        <button class="btn" id="submit-question" @click="submitQuestion">发布问卷</button>
+      </span>
     </div>
     <Modal></Modal>
   </div>
@@ -82,11 +82,9 @@
     computed: {
       ...mapState([
         'isAddQuestion',
-        'questionList',
-        'titleAndDate',
+        'survey',
         'isOpenModal',
         'message',
-        'currentSavedQuestion',
         'savedIndex'
       ]),
     },
@@ -104,7 +102,8 @@
         'deleteOption',
         'saveQuestion',
         'submitQuestion',
-        'clearCurrentSavedQuestion'
+        'recoverSavedIndex',
+        'recoverSurvey'
       ])
     },
     directives: {
@@ -120,12 +119,8 @@
     beforeRouteLeave (to, from, next) {
       // 导航离开该组件的对应路由时调用
       // 可以访问组件实例 `this`
-      if (this.currentSavedQuestion) {
-        let savedQuestionnaire = localStorage.savedQuestionnaire ? JSON.parse(localStorage.savedQuestionnaire) : [];
-        savedQuestionnaire.push(this.currentSavedQuestion);
-        localStorage.savedQuestionnaire = JSON.stringify(savedQuestionnaire);
-      }
-      this.clearCurrentSavedQuestion();
+      this.recoverSavedIndex();
+      this.recoverSurvey();
       next();
     }
   }

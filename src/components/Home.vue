@@ -11,46 +11,46 @@
         </th>
       </tr>
       <tr v-for="(questionnaire,index) in savedQuestionnaire" class="tr">
-        <td>{{questionnaire.titleAndDate.title}}</td>
-        <td>{{ questionnaire.titleAndDate.date | empty }}</td>
+        <td>{{questionnaire.title}}</td>
+        <td>{{questionnaire.date | empty }}</td>
         <td class="saving">未发布</td>
         <td>
-          <router-link to="/edit" class="btn">
-            <span @click="editAgain(index)">编辑问卷</span>
-          </router-link>
+          <router-link  class="btn" v-on:click.native="editAgain(index)" to="/edit">编辑问卷</router-link>
           <a @click="deleteSaved(index)" class="btn">删除问卷</a>
         </td>
       </tr>
       <tr v-for="(questionnaire,index) in submitQuestionnaire" class="tr">
-        <td>{{questionnaire.titleAndDate.title}}</td>
-        <td>{{questionnaire.titleAndDate.date}}</td>
-        <td v-if="new Date(questionnaire.titleAndDate.date)>new Date()" class="ing">发布中</td>
+        <td>{{questionnaire.title}}</td>
+        <td>{{questionnaire.date}}</td>
+        <td v-if="new Date(questionnaire.date)>new Date()" class="ing">发布中</td>
         <td v-else class="been">已结束</td>
         <td>
-          <router-link to="/fill" v-if="new Date(questionnaire.titleAndDate.date)>new Date()" class="btn">
-            <span @click="fill(index)">填写问卷</span>
+          <router-link to="/fill"
+                       v-if="new Date(questionnaire.date)>new Date()"
+                       class="btn" @click.native="fill(index)">填写问卷
           </router-link>
-          <router-link to="/view" class="btn">
-            <span @click="view(index)">查看数据</span>
-          </router-link>
+          <router-link to="/view" class="btn" @click.native="view(index)">查看数据</router-link>
           <a @click="deleteSubmit(index)"
-             v-if="new Date(questionnaire.titleAndDate.date)<new Date()"
+             v-if="new Date(questionnaire.date)<new Date()"
              class="btn">
             删除问卷
           </a>
         </td>
       </tr>
     </table>
+    <Modal></Modal>
   </div>
 </template>
 <script type="text/ecmascript-6">
   import {mapState, mapMutations} from 'vuex'
+  import Modal from './Modal.vue'
   export default {
     name: 'Home',
+    components:{
+      Modal
+    },
     data: function () {
       return {
-        savedQuestionnaire: '',
-        submitQuestionnaire: '',
         isShowTable: false,
       }
     },
@@ -66,12 +66,15 @@
       ...mapState([
         'savedIndex',
         'submitIndex',
-        'viewIndex'
+        'viewIndex',
+        'isDeleteSaved',
+        'isDeleteSubmit',
+        'savedQuestionnaire',
+        'submitQuestionnaire'
       ]),
+
     },
     created: function () {
-      this.savedQuestionnaire = localStorage.savedQuestionnaire ? JSON.parse(localStorage.savedQuestionnaire) : [];
-      this.submitQuestionnaire = localStorage.submitQuestionnaire ? JSON.parse(localStorage.submitQuestionnaire) : [];
       if (this.savedQuestionnaire.length > 0 || this.submitQuestionnaire.length > 0) {
         this.isShowTable = true
       }
@@ -90,28 +93,16 @@
         'view',
         'editAgainChange',
         'toFill',
-        'toView'
-      ]),
-      deleteSaved(index){
-        this.savedQuestionnaire.splice(index, 1);
-        localStorage.savedQuestionnaire = JSON.stringify(this.savedQuestionnaire);
-      },
-      deleteSubmit(index){
-        this.submitQuestionnaire.splice(index, 1);
-        localStorage.submitQuestionnaire = JSON.stringify(this.submitQuestionnaire);
-      }
+        'toView',
+        'deleteSaved',
+        'deleteSubmit',
+        'updateSurveyList'
+      ])
     },
-    beforeRouteLeave(to, from, next){
-      if (this.savedIndex >= 0) {
-        this.editAgainChange();
-      }
-      if (this.submitIndex >= 0) {
-        this.toFill();
-      }
-      if (this.viewIndex >= 0) {
-        this.toView();
-      }
-      next();
+    beforeRouteEnter(to,from,next){
+        next(vm => {
+            vm.updateSurveyList();
+        })
     }
   }
 </script>
