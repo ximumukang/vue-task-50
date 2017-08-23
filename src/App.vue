@@ -116,7 +116,7 @@
     position: relative;
   }
   /* and 与 （ 间必须要一个空格 */
-  @media only screen and (min-width:798px){
+  @media only screen and (min-width:768px){
     #container {
       width: 75%;
       margin: 50px auto;

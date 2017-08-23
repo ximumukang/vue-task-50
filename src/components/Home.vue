@@ -30,11 +30,7 @@
                        class="btn" @click.native="fill(index)">填写问卷
           </router-link>
           <router-link to="/view" class="btn" @click.native="view(index)">查看数据</router-link>
-          <a @click="deleteSubmit(index)"
-             v-if="new Date(questionnaire.date)<new Date()"
-             class="btn">
-            删除问卷
-          </a>
+          <a @click="deleteSubmit(index)" v-if="new Date(questionnaire.date)<new Date()" class="btn">删除问卷</a>
         </td>
       </tr>
     </table>

@@ -107,7 +107,7 @@
   .btn {
     width:60px;
   }
-  @media only screen and (min-width:798px){
+  @media only screen and (min-width:768px){
     .message-box{
       width: 400px;
     }
