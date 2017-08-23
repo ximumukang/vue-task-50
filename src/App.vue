@@ -9,11 +9,40 @@
         <router-view></router-view>
       </div>
     </main>
+    <Modal :isOpenModal="isOpenModal"
+           :hasCancel="hasCancel"
+           :message="message"
+           :isToIndex="isToIndex"
+           :confirm="confirm"
+           :closeModal="closeModal">
+    </Modal>
   </div>
+
 </template>
 
 <script type="text/ecmascript-6">
+  import Modal from './components/Modal.vue'
+  import {mapState,mapActions, mapMutations} from 'vuex'
   export default {
+    components:{
+      Modal
+    },
+    computed:{
+      ...mapState([
+        'isOpenModal',
+        'hasCancel',
+        'message',
+        'isToIndex'
+      ])
+    },
+    methods:{
+      ...mapMutations([
+        'closeModal'
+      ]),
+      ...mapActions([
+        'confirm'
+      ])
+    }
 
   }
 </script>

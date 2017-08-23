@@ -22,25 +22,17 @@
 
   export default {
     name: 'Modal',
+    props: [
+      'isOpenModal',
+      'hasCancel',
+      'message',
+      'isToIndex',
+      'closeModal',
+      'confirm'
+    ],
     data: function () {
       return {}
     },
-    computed: {
-      ...mapState([
-        'isOpenModal',
-        'hasCancel',
-        'message',
-        'isToIndex'
-      ])
-    },
-    methods: {
-      ...mapMutations([
-        'closeModal'
-      ]),
-      ...mapActions([
-        'confirm'
-      ])
-    }
   }
 </script>
 

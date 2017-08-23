@@ -34,17 +34,12 @@
         </td>
       </tr>
     </table>
-    <Modal></Modal>
   </div>
 </template>
 <script type="text/ecmascript-6">
-  import {mapState, mapMutations} from 'vuex'
-  import Modal from './Modal.vue'
+  import {mapState,mapActions, mapMutations} from 'vuex'
   export default {
     name: 'Home',
-    components:{
-      Modal
-    },
     data: function () {
       return {
         isShowTable: false,
@@ -66,7 +61,7 @@
         'isDeleteSaved',
         'isDeleteSubmit',
         'savedQuestionnaire',
-        'submitQuestionnaire'
+        'submitQuestionnaire',
       ]),
 
     },
@@ -92,8 +87,8 @@
         'toView',
         'deleteSaved',
         'deleteSubmit',
-        'updateSurveyList'
-      ])
+        'updateSurveyList',
+      ]),
     },
     beforeRouteEnter(to,from,next){
         next(vm => {

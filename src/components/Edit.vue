@@ -63,15 +63,11 @@
         <button class="btn" id="submit-question" @click="submitQuestion">发布问卷</button>
       </span>
     </div>
-    <Modal></Modal>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Modal from './Modal.vue'
-  import {mapState} from 'vuex'
-  import {mapMutations} from 'vuex'
-  import {mapGetters} from 'vuex'
+  import {mapState,mapMutations,} from 'vuex'
   export default {
     name: 'EditQuestionnaire',
     data: function () {
@@ -83,8 +79,6 @@
       ...mapState([
         'isAddQuestion',
         'survey',
-        'isOpenModal',
-        'message',
         'savedIndex'
       ]),
     },
@@ -112,9 +106,6 @@
           el.focus()
         }
       }
-    },
-    components: {
-      Modal
     },
     beforeRouteLeave (to, from, next) {
       // 导航离开该组件的对应路由时调用

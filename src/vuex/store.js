@@ -80,7 +80,7 @@ export default new Vuex.Store({
     confirmDeleteSubmit(state){
       let submitQuestionnaire=JSON.parse(localStorage.submitQuestionnaire);
       submitQuestionnaire.splice(state.deleteIndex,1);
-      localStorage.savedQuestionnaire=JSON.stringify(submitQuestionnaire);
+      localStorage.submitQuestionnaire=JSON.stringify(submitQuestionnaire);
     },
 
     updateSurveyList(state){
@@ -179,6 +179,7 @@ export default new Vuex.Store({
         savedQuestionnaire.splice(state.savedIndex,1,state.survey);
       }else {
         savedQuestionnaire.push(state.survey);
+        state.savedIndex=savedQuestionnaire.length-1;
       }
       localStorage.savedQuestionnaire=JSON.stringify(savedQuestionnaire);
     },
@@ -275,7 +276,7 @@ export default new Vuex.Store({
     //确定提交填完的问卷
     confirmFill(state){
       let submitQuestionnaire = JSON.parse(localStorage.submitQuestionnaire);
-      let answer = submitQuestionnaire[state.submitIndex].answer ;
+      let answer = submitQuestionnaire[state.submitIndex].answer;
       if(!answer.length){
 
         for(let i=0,len=state.survey.questionList.length;i<len;i++){
@@ -316,7 +317,8 @@ export default new Vuex.Store({
       state.survey={
         questionList: [],
         title: '这里是标题',
-        date: ''
+        date: '',
+        answer:[]
       };
     }
   },
