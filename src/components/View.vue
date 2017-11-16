@@ -55,7 +55,7 @@
           'recoverSurvey'
       ]),
     },
-    updated(){
+    mounted(){
       let canvasEles = document.getElementsByTagName("canvas");
       for (let i = 0,len=canvasEles.length; i < len; i++) {
         if (typeof this.answer[i][0] !== "number") {
